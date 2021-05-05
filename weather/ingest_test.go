@@ -1,4 +1,4 @@
-package postgres_test
+package weather_test
 
 import (
 	"context"
@@ -6,7 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nicovogelaar/postgres-test"
+	"github.com/nicovogelaar/postgres-test/postgres"
+	"github.com/nicovogelaar/postgres-test/weather"
 )
 
 func TestIngestWeatherData(t *testing.T) {
@@ -17,15 +18,15 @@ func TestIngestWeatherData(t *testing.T) {
 
 	batchSize := 50000
 
-	err := postgres.IngestWeatherData(context.Background(), db, batchSize, progressCallback)
+	err := weather.IngestWeatherData(context.Background(), db, batchSize, progressCallback)
 	if err != nil {
 		t.Fatalf("Failed to ingest weather data: %v", err)
 	}
 }
 
-func progressCallback(filename string, i int, start time.Time) {
+func progressCallback(filename string, i int, start time.Time, percent float64) {
 	s := time.Since(start).Seconds()
-	log.Printf("Progress %v: %d / %.2f seconds / %d per second", filename, i, s, int(float64(i)/s))
+	log.Printf("Progress %v: %d / %.2f seconds / %d per second / %.2f%%", filename, i, s, int(float64(i)/s), percent)
 }
 
 func check(err error) {

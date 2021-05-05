@@ -1,2 +1,3 @@
-/weather*
-!/weather.sh
+weather*.sql
+weather*.csv
+weather*.tar.gz
